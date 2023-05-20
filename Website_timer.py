@@ -8,7 +8,7 @@ class WebsiteTimer:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Website Timer")
-        self.root.geometry("400x250")
+        self.root.geometry("400x300")
         
         self.file_path = ""
         self.is_running = False
@@ -32,6 +32,12 @@ class WebsiteTimer:
         self.website_var = tk.StringVar(self.root)
         self.website_dropdown = tk.OptionMenu(self.root, self.website_var, *self.website_list, "Enter custom website")
         self.website_dropdown.pack()
+        
+        self.entry_label = tk.Label(self.root, text="Enter a website URL:")
+        self.entry_label.pack()
+        self.entry_var = tk.StringVar()
+        self.entry = tk.Entry(self.root, textvariable=self.entry_var)
+        self.entry.pack()
         
     def run(self):
         self.root.mainloop()
@@ -79,8 +85,10 @@ class WebsiteTimer:
     def timer_loop(self):
         website = self.website_var.get()
         if website == "Enter custom website":
-            website = input("Enter a website URL or 'q' to quit: ")
-            if website == "q":
+            website = self.entry_var.get()
+            if not website:
+                print("Invalid website URL. Please try again.")
+                self.root.after(1000, self.timer_loop)
                 return
             
         if not website:
